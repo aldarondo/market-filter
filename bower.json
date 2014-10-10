@@ -1,22 +1,10 @@
 {
   "name": "market-filter",
-  "version": "0.0.1",
-  "authors": [
-    "charles@aldarondo.us"
-  ],
   "description": "Market Filter",
-  "main": "static/marketCurrency.js",
-  "moduleType": [
-    "globals"
-  ],
+  "version": "0.0.1",
+  "homepage": "https://github.com/aldarondo/market-filter",
+  "license": "GNU2",
   "private": true,
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
   "dependencies": {
     "angular": "~1.2.26",
     "angular-cookies": "~1.2.26"
