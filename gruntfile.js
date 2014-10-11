@@ -4,7 +4,7 @@ module.exports = function(grunt) {
         jslint: {
             client: {
                 src: [
-                    'static/*.js'
+                    'app/js/*.js'
                 ],
                 directives: {
                     node: false,
@@ -12,6 +12,19 @@ module.exports = function(grunt) {
                     nomen: true,
                     predef: [
                         'angular'
+                    ]
+                }
+            }
+        },
+        jasmine: {
+            pivotal: {
+                src: 'app/js/*.js',
+                options: {
+                    specs: 'tests/**/*.js',
+                    vendor: [
+                        'app/bower_components/angular/angular.js',
+                        'node_modules/angular-mocks/angular-mocks.js',
+                        'app/bower_components/angular-cookies/angular-cookies.js'
                     ]
                 }
             }
@@ -42,14 +55,22 @@ module.exports = function(grunt) {
                     'dist/combined.js': ['dist/combined.js']
                 }
             }
+        },
+        watch: {
+            scripts: {
+                files: ['app/js/*.js'],
+                tasks: ['jslint', 'jasmine']
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-jslint');
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-notify');
 
-    grunt.registerTask('default', ['jslint', 'concat:css', 'cssmin:css', 'concat:js', 'uglify:js']);
+    grunt.registerTask('default', ['jasmine', 'jslint', 'concat:css', 'cssmin:css', 'concat:js', 'uglify:js']);
 };
