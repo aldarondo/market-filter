@@ -1,10 +1,11 @@
 module.exports = function(grunt) {
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
+        appDir: 'app/js/*.js',
+        testDir: 'tests/**/*.js',
         jslint: {
             client: {
                 src: [
-                    'app/js/*.js'
+                    '<%= appDir %>'
                 ],
                 directives: {
                     node: false,
@@ -17,35 +18,46 @@ module.exports = function(grunt) {
             }
         },
         jasmine: {
-            pivotal: {
-                src: 'app/js/*.js',
+            coverage: {
+                src: '<%= appDir %>',
                 options: {
-                    specs: 'tests/**/*.js',
+                    specs: '<%= testDir %>',
                     vendor: [
                         'app/bower_components/angular/angular.js',
                         'node_modules/angular-mocks/angular-mocks.js',
                         'app/bower_components/angular-cookies/angular-cookies.js'
-                    ]
+                    ],
+                    template: require('grunt-template-jasmine-istanbul'),
+                    templateOptions: {
+                        coverage: 'dist/coverage/coverage.json',
+                        report: 'dist/coverage',
+                        thresholds: {
+                            lines: 75,
+                            statements: 75,
+                            branches: 75,
+                            functions: 90
+                        }
+                    }
                 }
             }
         },
         concat: {
             css: {
                 src: [
-                    'css/*'
+                    'app/css/*'
                 ],
                 dest: 'dist/combined.css'
             },
             js: {
                 src: [
-                    'static/*.js'
+                    '<%= appDir %>'
                 ],
                 dest: 'dist/combined.js'
             }
         },
         cssmin: {
             css: {
-                src: 'combined.css',
+                src: 'dist/combined.css',
                 dest: 'dist/combined.min.css'
             }
         },
@@ -58,7 +70,7 @@ module.exports = function(grunt) {
         },
         watch: {
             scripts: {
-                files: ['app/js/*.js'],
+                files: ['<%= appDir %>', '<%= testDir %>'],
                 tasks: ['jslint', 'jasmine']
             }
         }
