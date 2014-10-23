@@ -24,8 +24,18 @@ marketFilters.filter('marketcurrency', ['$cookies', function (cookies) {
             }
         });
     }
-    return function (input) {
+    return function (input, roundOption) {
         input = input * currencyList[currencyName][CURRENCY_MULTIPLIER_INDEX];
+
+        var numDecimalPlaces = currencyList[currencyName][CURRENCY_DECIMAL_PLACES_INDEX];
+        if (numDecimalPlaces > 0) {
+            numDecimalPlaces = Math.pow(10, numDecimalPlaces);
+            if (roundOption === 'rounddown') {
+                input = Math.floor(input * numDecimalPlaces) / numDecimalPlaces;
+            } else {
+                input = Math.ceil(input * numDecimalPlaces) / numDecimalPlaces;
+            }
+        }
         return currencyList[currencyName][CURRENCY_SYMBOL_INDEX] +
             input.toFixed(currencyList[currencyName][CURRENCY_DECIMAL_PLACES_INDEX]);
     };

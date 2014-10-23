@@ -119,4 +119,28 @@ describe('The marketcurrency filter', function() {
         // Assert
         expect(result).toEqual('€50.00');
     });
+
+    it('should round ARS up', function() {
+        // Arrange
+        $cookies.preferences = 'currency=ARS';
+        var input = 99.99;
+
+        // Act
+        var result = $filter('marketcurrency')(input);
+
+        // Assert
+        expect(result).toEqual('AR$50.00');
+    });
+
+    it('should round ARS down', function() {
+        // Arrange
+        $cookies.preferences = 'currency=ARS';
+        var input = 99.99;
+
+        // Act
+        var result = $filter('marketcurrency')(input, 'rounddown');
+
+        // Assert
+        expect(result).toEqual('AR$49.99');
+    });
 });
