@@ -1,5 +1,5 @@
 var marketFilters = angular.module('market.filters', ['ngCookies']);
-marketFilters.filter('marketcurrency', ['$cookies', function (cookies) {
+marketFilters.filter('marketcurrency', ['$cookies', '$window', function (cookies, $window) {
     'use strict';
     var currencyList =
         {
@@ -10,7 +10,14 @@ marketFilters.filter('marketcurrency', ['$cookies', function (cookies) {
             CAD: [0.5, "$", 2],
             ARS: [0.5, "AR$", 2]
         },
-        currencyName = 'USD',
+        localeCurrencies =
+        {
+            'en-us': 'USD',
+            'es-us': 'USD',
+            'en-gb': 'GBP',
+            'en-au': 'AUD'
+        },
+        currencyName = localeCurrencies[$window.navigator.userLanguage || $window.navigator.language] || 'USD',
         CURRENCY_MULTIPLIER_INDEX = 0,
         CURRENCY_SYMBOL_INDEX = 1,
         CURRENCY_DECIMAL_PLACES_INDEX = 2;

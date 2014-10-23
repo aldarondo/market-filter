@@ -4,12 +4,16 @@ describe('The marketcurrency filter', function() {
 
     var $filter;
     var $cookies;
+    var $window;
 
     beforeEach(module('market.filters'));
 
-    beforeEach(inject(function (_$filter_, _$cookies_) {
+    beforeEach(inject(function (_$filter_, _$cookies_, _$window_) {
         $filter = _$filter_;
         $cookies = _$cookies_;
+        $window = _$window_;
+        $window.navigator.userLanguage = 'en-us';
+        $window.navigator.language = 'en-us';
     }));
 
     it('should default to USD', function() {
@@ -22,6 +26,33 @@ describe('The marketcurrency filter', function() {
 
         // Assert
         expect(result).toEqual('$100.00');
+    });
+
+    it('should default to USD for invalid language', function() {
+        // Arrange
+        $cookies.preferences = '';
+        $window.navigator.userLanguage = 'qa-qa';
+        $window.navigator.language = 'qa-qa';
+        var input = 100;
+
+        // Act
+        var result = $filter('marketcurrency')(input);
+
+        // Assert
+        expect(result).toEqual('$100.00');
+    });
+
+    it('should default to GBP when en-gb', function() {
+        // Arrange
+        $cookies.preferences = '';
+        $window.navigator.userLanguage = 'en-gb';
+        var input = 100;
+
+        // Act
+        var result = $filter('marketcurrency')(input);
+
+        // Assert
+        expect(result).toEqual('£50.00');
     });
 
     it('should read USD cookie', function() {
