@@ -1,16 +1,19 @@
 var marketFilters = angular.module('market.filters', ['ngCookies']);
-marketFilters.filter('marketcurrency', ['$filter', '$cookies', function (filter, cookies) {
+marketFilters.filter('marketcurrency', ['$cookies', function (cookies) {
     'use strict';
     var currencyList =
         {
-            USD: [1, "$"],
-            GBP: [0.5, "£"],
-            AUD: [0.5, "$"],
-            EUR: [0.5, "€"],
-            CAD: [0.5, "$"],
-            ARS: [0.5, "AR$"]
+            USD: [1, "$", 2],
+            GBP: [0.5, "£", 2],
+            AUD: [0.5, "$", 2],
+            EUR: [0.5, "€", 2],
+            CAD: [0.5, "$", 2],
+            ARS: [0.5, "AR$", 2]
         },
-        currencyName = 'USD';
+        currencyName = 'USD',
+        CURRENCY_MULTIPLIER_INDEX = 0,
+        CURRENCY_SYMBOL_INDEX = 1,
+        CURRENCY_DECIMAL_PLACES_INDEX = 2;
     if (cookies.preferences !== undefined && cookies.preferences.length) {
         angular.forEach(cookies.preferences.split("&"), function (value) {
             if (value.indexOf('currency=') === 0) {
@@ -22,8 +25,9 @@ marketFilters.filter('marketcurrency', ['$filter', '$cookies', function (filter,
         });
     }
     return function (input) {
-        input = input * currencyList[currencyName][0];
-        return filter('currency')(input, currencyList[currencyName][1]);
+        input = input * currencyList[currencyName][CURRENCY_MULTIPLIER_INDEX];
+        return currencyList[currencyName][CURRENCY_SYMBOL_INDEX] +
+            input.toFixed(currencyList[currencyName][CURRENCY_DECIMAL_PLACES_INDEX]);
     };
 }]);
 
