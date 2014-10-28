@@ -17,7 +17,7 @@ marketFilters.filter('marketcurrency', ['$cookies', '$window', function (cookies
             'en-gb': 'GBP',
             'en-au': 'AUD'
         },
-        currencyName = localeCurrencies[$window.navigator.userLanguage || $window.navigator.language] || 'USD',
+        currencyName = '',
         CURRENCY_MULTIPLIER_INDEX = 0,
         CURRENCY_SYMBOL_INDEX = 1,
         CURRENCY_DECIMAL_PLACES_INDEX = 2;
@@ -30,6 +30,14 @@ marketFilters.filter('marketcurrency', ['$cookies', '$window', function (cookies
                 }
             }
         });
+    }
+    if (!currencyName.length) {
+        currencyName = localeCurrencies[$window.navigator.userLanguage || $window.navigator.language] || 'USD';
+        if (cookies.preferences !== undefined && cookies.preferences.length) {
+            cookies.preferences += "&currency=" + currencyName;
+        } else {
+            cookies.preferences = "currency=" + currencyName;
+        }
     }
     return function (input, roundOption) {
         input = input * currencyList[currencyName][CURRENCY_MULTIPLIER_INDEX];
