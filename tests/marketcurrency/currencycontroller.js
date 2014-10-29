@@ -1,19 +1,43 @@
 'use strict';
 
-describe('The currency controller', function() {
-    var $rootScope, $scope, $controller;
+describe('The currency controller', function () {
+    var scope, controller, httpBackend;
+
+    var currencyList = {
+        USD: [1, "$", 2],
+        GBP: [0.5, "£", 0],
+        AUD: [0.5, "$", 2],
+        EUR: [0.5, "€", 2],
+        CAD: [0.5, "$", 2],
+        ARS: [0.5, "AR$", 2]
+    };
 
     beforeEach(module('marketApp'));
 
-    beforeEach(inject(function (_$rootScope_, _$controller_) {
-        $rootScope = _$rootScope_;
-        $scope = $rootScope.$new();
-        $controller = _$controller_;
-
-        $controller('currencyController', {'$scope' : $scope});
+    beforeEach(inject(function ($rootScope, $controller, $httpBackend) {
+        httpBackend = $httpBackend;
+        scope = $rootScope.$new();
+        controller = $controller;
     }));
 
-    it('should have input value', function() {
-        expect($scope.amount).toEqual(100.50);
+    it("gets the currency list", function () {
+        httpBackend.when('GET', './api/latest.json')
+            .respond(currencyList);
+        controller('currencyController', {'$scope': scope});
+        httpBackend.expectGET('./api/latest.json');
+        httpBackend.flush();
+        expect(scope.currencyList).toMatch(currencyList);
+    });
+
+    it('should have input value', function () {
+        controller('currencyController', {'$scope': scope});
+        expect(scope.amount).toEqual(100.50);
+    });
+
+    it('should not have a currencyList when server unavailable', function() {
+        httpBackend.expectGET('./api/latest.json').respond(500, '');
+        controller('currencyController', {'$scope': scope});
+        httpBackend.flush();
+        expect(scope.currencyList).toBeUndefined();
     });
 });

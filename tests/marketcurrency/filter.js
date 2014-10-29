@@ -5,6 +5,14 @@ describe('The marketcurrency filter', function() {
     var $filter;
     var $cookies;
     var $window;
+    var currencyList = {
+        USD: [1, "$", 2],
+        GBP: [0.5, "£", 0],
+        AUD: [0.5, "$", 2],
+        EUR: [0.5, "€", 2],
+        CAD: [0.5, "$", 2],
+        ARS: [0.5, "AR$", 2]
+    };
 
     beforeEach(module('market.filters'));
 
@@ -24,7 +32,7 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
         expect(result).toEqual('$100.00');
@@ -37,7 +45,7 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
         expect(result).toEqual('$100.00');
@@ -49,10 +57,10 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
-        expect(result).toEqual('£50.00');
+        expect(result).toEqual('£50');
     });
 
     it('should read USD cookie', function() {
@@ -61,7 +69,7 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
         expect(result).toEqual('$100.00');
@@ -73,10 +81,10 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
-        expect(result).toEqual('£50.00');
+        expect(result).toEqual('£50');
     });
 
     it('should read AUD cookie', function() {
@@ -85,7 +93,7 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
         expect(result).toEqual('$50.00');
@@ -97,7 +105,7 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
         expect(result).toEqual('€50.00');
@@ -109,7 +117,7 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
         expect(result).toEqual('$50.00');
@@ -121,7 +129,7 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
         expect(result).toEqual('AR$50.00');
@@ -133,7 +141,7 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
         expect(result).toEqual('$100.00');
@@ -145,7 +153,7 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
         expect(result).toEqual('€50.00');
@@ -157,7 +165,7 @@ describe('The marketcurrency filter', function() {
         var input = 99.99;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
         expect(result).toEqual('AR$50.00');
@@ -169,7 +177,7 @@ describe('The marketcurrency filter', function() {
         var input = 99.99;
 
         // Act
-        var result = $filter('marketcurrency')(input, 'rounddown');
+        var result = $filter('marketcurrency')(input, currencyList, 'rounddown');
 
         // Assert
         expect(result).toEqual('AR$49.99');
@@ -181,10 +189,10 @@ describe('The marketcurrency filter', function() {
         var input = 100;
 
         // Act
-        var result = $filter('marketcurrency')(input);
+        var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
-        expect(result).toEqual('£50.00');
+        expect(result).toEqual('£50');
         expect($cookies.preferences).toEqual('currency=GBP');
     });
 });
