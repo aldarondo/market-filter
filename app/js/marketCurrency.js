@@ -53,7 +53,7 @@ var marketApp = angular.module('marketApp', ['market.filters']);
 marketApp.controller('currencyController', function ($scope, $http) {
     'use strict';
     $scope.amount = 100.50;
-    $http.get('./api/latest.json').
+    $http.get('http://localhost:3000/api/latest.json').
         success(function (data) {
             $scope.currencyList = data;
         }).
