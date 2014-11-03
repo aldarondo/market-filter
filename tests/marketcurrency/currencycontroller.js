@@ -21,10 +21,10 @@ describe('The currency controller', function () {
     }));
 
     it("gets the currency list", function () {
-        httpBackend.when('GET', './api/latest.json')
+        httpBackend.when('GET', 'http://localhost:3000/api/latest.json')
             .respond(currencyList);
         controller('currencyController', {'$scope': scope});
-        httpBackend.expectGET('./api/latest.json');
+        httpBackend.expectGET('http://localhost:3000/api/latest.json');
         httpBackend.flush();
         expect(scope.currencyList).toMatch(currencyList);
     });
@@ -35,7 +35,7 @@ describe('The currency controller', function () {
     });
 
     it('should not have a currencyList when server unavailable', function() {
-        httpBackend.expectGET('./api/latest.json').respond(500, '');
+        httpBackend.expectGET('http://localhost:3000/api/latest.json').respond(500, '');
         controller('currencyController', {'$scope': scope});
         httpBackend.flush();
         expect(scope.currencyList).toBeUndefined();
