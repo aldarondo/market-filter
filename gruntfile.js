@@ -1,4 +1,8 @@
 module.exports = function(grunt) {
+    require('load-grunt-tasks')(grunt, {
+        pattern: ['grunt-*', '!grunt-template-jasmine-istanbul']
+    });
+
     grunt.initConfig({
         appDir: 'app/js/*.js',
         testDir: 'tests/**/*.js',
@@ -73,6 +77,22 @@ module.exports = function(grunt) {
                 files: ['<%= appDir %>', '<%= testDir %>'],
                 tasks: ['jslint', 'jasmine']
             }
+        },
+        concurrent: {
+            angularnode: {
+                tasks:['nodemon', 'watch'],
+                options: {
+                    logConcurrentOutput: true
+                }
+            }
+        },
+        nodemon: {
+            dev: {
+                script: 'server/server.js',
+                options: {
+                    nodeArgs: ['--debug']
+                }
+            }
         }
     });
 
@@ -83,6 +103,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-notify');
+    grunt.loadNpmTasks('grunt-nodemon');
 
-    grunt.registerTask('default', ['jasmine', 'jslint', 'concat:css', 'cssmin:css', 'concat:js', 'uglify:js']);
+    grunt.registerTask('default', ['concurrent:angularnode']);
+    grunt.registerTask('deploy', ['jasmine', 'jslint', 'concat:css', 'cssmin:css', 'concat:js', 'uglify:js']);
 };
