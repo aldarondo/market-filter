@@ -330,13 +330,39 @@ describe('The marketcurrency filter', function() {
     it('should default to GBP when en-gb and update cookie', function() {
         // Arrange
         $window.navigator.userLanguage = 'en-gb';
-        var input = 100;
+        var input = 2000;
 
         // Act
         var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
-        expect(result).toEqual('£50.00');
+        expect(result).toEqual('£1,000.00');
         expect($cookies.preferences).toEqual('currency=GBP');
+    });
+
+    it('should have symbol before for CAD when en-ca', function() {
+        // Arrange
+        $window.navigator.userLanguage = 'en-ca';
+        var input = 2000;
+
+        // Act
+        var result = $filter('marketcurrency')(input, currencyList);
+
+        // Assert
+        expect(result).toEqual('$1,000.00');
+        expect($cookies.preferences).toEqual('currency=CAD');
+    });
+
+    it('should have symbol after for CAD when fr-ca', function() {
+        // Arrange
+        $window.navigator.userLanguage = 'fr-ca';
+        var input = 2000;
+
+        // Act
+        var result = $filter('marketcurrency')(input, currencyList);
+
+        // Assert
+        expect(result).toEqual('1,000.00$');
+        expect($cookies.preferences).toEqual('currency=CAD');
     });
 });
