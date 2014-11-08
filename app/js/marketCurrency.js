@@ -1,3 +1,11 @@
+Number.prototype.formatMarketCurrency = function (n, x, s, c) {
+    'use strict';
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+        num = this.toFixed(n);
+
+    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+};
+
 var marketFilters = angular.module('market.filters', ['ngCookies']);
 marketFilters.filter('marketcurrency', ['$cookies', '$window', function (cookies, $window) {
     'use strict';
@@ -11,7 +19,9 @@ marketFilters.filter('marketcurrency', ['$cookies', '$window', function (cookies
         currencyName = '',
         CURRENCY_MULTIPLIER_INDEX = 0,
         CURRENCY_SYMBOL_INDEX = 1,
-        CURRENCY_DECIMAL_PLACES_INDEX = 2;
+        CURRENCY_DECIMAL_PLACES_INDEX = 2,
+        CURRENCY_THOUSANDS_CHAR_INDEX = 3,
+        CURRENCY_DECIMAL_CHAR_INDEX = 4;
     return function (input, currencyList, roundOption) {
         var multipliedInput = input,
             numDecimalPlaces;
@@ -45,7 +55,12 @@ marketFilters.filter('marketcurrency', ['$cookies', '$window', function (cookies
             }
         }
         return (currencyList[currencyName][CURRENCY_SYMBOL_INDEX] +
-        multipliedInput.toFixed(currencyList[currencyName][CURRENCY_DECIMAL_PLACES_INDEX]));
+        multipliedInput.formatMarketCurrency(
+                currencyList[currencyName][CURRENCY_DECIMAL_PLACES_INDEX],
+                3,
+                currencyList[currencyName][CURRENCY_THOUSANDS_CHAR_INDEX],
+                currencyList[currencyName][CURRENCY_DECIMAL_CHAR_INDEX]
+            ));
     };
 }]);
 

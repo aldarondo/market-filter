@@ -6,12 +6,12 @@ describe('The marketcurrency filter', function() {
     var $cookies;
     var $window;
     var currencyList = {
-        USD: [1, "$", 2],
-        GBP: [0.5, "£", 0],
-        AUD: [0.5, "$", 2],
-        EUR: [0.5, "€", 2],
-        CAD: [0.5, "$", 2],
-        ARS: [0.5, "AR$", 2]
+        "ARS": [0.5, "AR$", 2, ".", ","],
+        "USD": [1, "$", 2, ",", "."],
+        "GBP": [0.5, "£", 0, ",", "."],
+        "AUD": [0.5, "$", 2, ",", "."],
+        "EUR": [0.5, "€", 2, ",", "."],
+        "CAD": [0.5, "$", 2, ",", "."]
     };
 
     beforeEach(module('market.filters'));
@@ -132,7 +132,7 @@ describe('The marketcurrency filter', function() {
         var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
-        expect(result).toEqual('AR$50.00');
+        expect(result).toEqual('AR$50,00');
     });
 
     it('should default to USD with bad cookie', function() {
@@ -168,7 +168,7 @@ describe('The marketcurrency filter', function() {
         var result = $filter('marketcurrency')(input, currencyList);
 
         // Assert
-        expect(result).toEqual('AR$50.00');
+        expect(result).toEqual('AR$50,00');
     });
 
     it('should round ARS down', function() {
@@ -180,7 +180,7 @@ describe('The marketcurrency filter', function() {
         var result = $filter('marketcurrency')(input, currencyList, 'rounddown');
 
         // Assert
-        expect(result).toEqual('AR$49.99');
+        expect(result).toEqual('AR$49,99');
     });
 
     it('should default to GBP when en-gb and update cookie', function() {

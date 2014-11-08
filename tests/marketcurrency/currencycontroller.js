@@ -4,12 +4,12 @@ describe('The currency controller', function () {
     var scope, controller, httpBackend;
 
     var currencyList = {
-        USD: [1, "$", 2],
-        GBP: [0.5, "£", 0],
-        AUD: [0.5, "$", 2],
-        EUR: [0.5, "€", 2],
-        CAD: [0.5, "$", 2],
-        ARS: [0.5, "AR$", 2]
+        "ARS": [0.5, "AR$", 2, ".", ","],
+        "USD": [1, "$", 2, ",", "."],
+        "GBP": [0.5, "£", 0, ",", "."],
+        "AUD": [0.5, "$", 2, ",", "."],
+        "EUR": [0.5, "€", 2, ",", "."],
+        "CAD": [0.5, "$", 2, ",", "."]
     };
 
     beforeEach(module('marketApp'));
